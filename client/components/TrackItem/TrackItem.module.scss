@@ -1,0 +1,21 @@
+.track {
+  margin: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+
+}
+
+.credit {
+  max-width: 200px;
+  margin: 0 20px;
+}
+
+.artist {
+  font-size: 12px;
+  color: grey;
+}
+
+.delete {
+  margin-left: auto;
+}
