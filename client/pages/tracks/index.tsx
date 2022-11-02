@@ -6,20 +6,20 @@ import {ITrack} from "../../types/track";
 import TrackList from "../../components/TrackList/TrackList";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useActions} from "../../hooks/useActions";
+import {TNextThunkDispatch, wrapper} from "../../store";
+import {fetchTracks} from "../../store/action-creators/tracks";
 
 const Index = () => {
     const router = useRouter();
-    const tracks: ITrack[] = [
-        {
-            _id: '1', name: 'Track 1', artist: 'Artist 1', text: 'Text 1', listens: 1, audio: '', picture: '', comments: [{_id: '1', username: 'Username 1', text: 'Comment 1'}]
-        },
-        {
-            _id: '2', name: 'Track 2', artist: 'Artist 2', text: 'Text 2', listens: 2, audio: '', picture: '', comments: [{_id: '2', username: 'Username 2', text: 'Comment 2'}]
-        },
-        {
-            _id: '3', name: 'Track 3', artist: 'Artist 3', text: 'Text 3', listens: 3, audio: '', picture: '', comments: [{_id: '3', username: 'Username 3', text: 'Comment 3'}]
-        },
-    ]
+    const {tracks, error} = useTypedSelector(state => state.track)
+
+    if (error) {
+        return <MainLayout>
+            <h1>
+                {error}
+            </h1>
+        </MainLayout>
+    }
 
     return (
         <>
@@ -45,3 +45,8 @@ const Index = () => {
 };
 
 export default Index;
+
+export const getServerSideProps = wrapper.getServerSideProps(async ({store}) => {
+    const dispatch = store.dispatch as TNextThunkDispatch
+    await dispatch(await fetchTracks())
+})
