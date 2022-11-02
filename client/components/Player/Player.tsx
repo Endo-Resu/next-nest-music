@@ -4,19 +4,29 @@ import {Grid, IconButton} from "@mui/material";
 import s from './Player.module.scss';
 import {ITrack} from "../../types/track";
 import TrackProgress from "../TrackProgress/TrackProgress";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {useActions} from "../../hooks/useActions";
 
 const Player = () => {
-    const active = false;
-
+    const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player);
+    const {pauseTrack, playTrack} = useActions();
     const track: ITrack = {
         _id: '1', name: 'Track 1', artist: 'Artist 1', text: 'Text 1', listens: 1, audio: '', picture: '', comments: [{_id: '1', username: 'Username 1', text: 'Comment 1'}]
     }
 
+    const play = () => {
+        if (pause) {
+            playTrack()
+        } else {
+            pauseTrack()
+        }
+    }
+
     return (
         <div className={s.player}>
-            <IconButton onClick={(e) => e.stopPropagation()}>
+            <IconButton onClick={play}>
                 {
-                    active ?
+                    !pause ?
                         <Pause />
                         :
                         <PlayArrow />
